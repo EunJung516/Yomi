@@ -4,8 +4,17 @@ import { STUDY_MODES, FILTERS, filterWordsByModeRequirement, getEligibleWords } 
 export default function StudyConfig({ words, folders, activeFolderId, settings, lastSessionWrong, onStart }) {
   const [modeId, setModeId] = useState(STUDY_MODES[0].id)
   const [filterId, setFilterId] = useState('all')
+  const [rangeStart, setRangeStart] = useState(1)
+  const [rangeEnd, setRangeEnd] = useState(50)
 
   const mode = STUDY_MODES.find((m) => m.id === modeId)
+
+  const folderWordCount = useMemo(
+    () => words.filter((w) => w.folderId === activeFolderId).length,
+    [words, activeFolderId]
+  )
+
+  const range = { start: rangeStart, end: rangeEnd }
 
   const eligibleCount = useMemo(() => {
     const byFilter = getEligibleWords({
@@ -14,9 +23,10 @@ export default function StudyConfig({ words, folders, activeFolderId, settings, 
       filter: filterId,
       settings,
       lastSessionWrong,
+      range,
     })
     return filterWordsByModeRequirement(byFilter, mode).length
-  }, [words, activeFolderId, filterId, settings, lastSessionWrong, mode])
+  }, [words, activeFolderId, filterId, settings, lastSessionWrong, mode, rangeStart, rangeEnd])
 
   const activeFolder = folders.find((f) => f.id === activeFolderId)
 
@@ -69,6 +79,36 @@ export default function StudyConfig({ words, folders, activeFolderId, settings, 
               </label>
             ))}
           </div>
+
+          {filterId === 'range' && (
+            <div className="recent-count-control" style={{ marginTop: 10 }}>
+              <label htmlFor="range-start" style={{flexShrink: 0}}>구간</label>
+              <input
+                id="range-start"
+                type="number"
+                min={1}
+                max={folderWordCount || 1}
+                className="input"
+                value={rangeStart}
+                onChange={(e) => setRangeStart(Math.max(1, Number(e.target.value) || 1))}
+                style={{ width: 80 }}
+              />
+              <span>~</span>
+              <input
+                id="range-end"
+                type="number"
+                min={1}
+                max={folderWordCount || 1}
+                className="input"
+                value={rangeEnd}
+                onChange={(e) => setRangeEnd(Math.max(1, Number(e.target.value) || 1))}
+                style={{ width: 80 }}
+              />
+              <span className="hint-text" style={{ margin: 0 }}>
+                / 전체 {folderWordCount}개 <br/>(단어를 추가한 순서 기준)
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -79,7 +119,7 @@ export default function StudyConfig({ words, folders, activeFolderId, settings, 
         <button
           className="btn btn-primary"
           disabled={eligibleCount === 0}
-          onClick={() => onStart(mode, filterId)}
+          onClick={() => onStart(mode, filterId, range)}
         >
           학습 시작
         </button>

@@ -17,11 +17,13 @@ export default function StudyPage({
   const [stage, setStage] = useState(STAGE.CONFIG)
   const [mode, setMode] = useState(null)
   const [filterId, setFilterId] = useState('all')
+  const [range, setRange] = useState(null)
   const [results, setResults] = useState([])
 
-  const startSession = (selectedMode, selectedFilter) => {
+  const startSession = (selectedMode, selectedFilter, selectedRange) => {
     setMode(selectedMode)
     setFilterId(selectedFilter)
+    setRange(selectedRange || null)
     setStage(STAGE.SESSION)
   }
 
@@ -43,6 +45,7 @@ export default function StudyPage({
         folderId={activeFolderId}
         mode={mode}
         filterId={filterId}
+        range={range}
         settings={settings}
         lastSessionWrong={lastSessionWrong}
         onUpdateWords={onUpdateWords}

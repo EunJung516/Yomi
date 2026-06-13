@@ -45,6 +45,7 @@ export const FILTERS = [
   { id: 'favorite', label: '즐겨찾기만' },
   { id: 'recent', label: '최근 추가 단어만' },
   { id: 'last-session-wrong', label: '최근 세션 오답' },
+  { id: 'range', label: '범위 선택' },
 ]
 
 // 모드에 맞춰 단어 목록을 필터링합니다 (한자 모드는 한자가 있는 단어만 대상).
@@ -56,7 +57,7 @@ export function filterWordsByModeRequirement(words, mode) {
 }
 
 // 선택한 필터에 맞춰 학습 대상 단어 목록을 구성합니다.
-export function getEligibleWords({ words, folderId, filter, settings, lastSessionWrong }) {
+export function getEligibleWords({ words, folderId, filter, settings, lastSessionWrong, range }) {
   const folderWords = words.filter((w) => w.folderId === folderId)
 
   switch (filter) {
@@ -73,6 +74,14 @@ export function getEligibleWords({ words, folderId, filter, settings, lastSessio
     case 'last-session-wrong': {
       const wrongIds = new Set(lastSessionWrong?.[folderId] || [])
       return folderWords.filter((w) => wrongIds.has(w.id))
+    }
+    case 'range': {
+      // 추가한 순서(오래된 순)를 기준으로 1번부터 번호를 매긴 뒤 구간을 잘라냅니다.
+      const ordered = [...folderWords].sort((a, b) => a.createdAt - b.createdAt)
+      const start = Math.max(1, range?.start || 1)
+      const end = Math.min(ordered.length, range?.end || ordered.length)
+      if (start > end) return []
+      return ordered.slice(start - 1, end)
     }
     case 'all':
     default:

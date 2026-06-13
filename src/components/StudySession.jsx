@@ -13,6 +13,7 @@ export default function StudySession({
   folderId,
   mode,
   filterId,
+  range,
   settings,
   lastSessionWrong,
   onUpdateWords,
@@ -27,7 +28,7 @@ export default function StudySession({
   const inputRef = useRef(null)
 
   function buildQueue() {
-    const eligible = getEligibleWords({ words, folderId, filter: filterId, settings, lastSessionWrong })
+    const eligible = getEligibleWords({ words, folderId, filter: filterId, settings, lastSessionWrong, range })
     return shuffleArray(filterWordsByModeRequirement(eligible, mode))
   }
 
