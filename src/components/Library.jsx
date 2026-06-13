@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import FolderBar from './FolderBar'
+import DictionaryImport from './DictionaryImport'
 import WordForm from './WordForm'
 import WordList from './WordList'
 import Toolbar from './Toolbar'
@@ -82,7 +83,9 @@ export default function Library({
         onSave={handleSave}
         onCancelEdit={() => setEditingWord(null)}
       />
-      
+
+      <DictionaryImport words={words} folderId={activeFolderId} onUpdateWords={onUpdateWords} />
+
       <Toolbar
         settings={settings}
         onSettingsChange={onSettingsChange}

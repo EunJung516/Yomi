@@ -107,3 +107,31 @@ jp-vocab/
 ### 6. 사전 자동완성 데이터 확장
 
 `src/data/dictionary.js`의 `LOCAL_DICTIONARY` 배열에 `{ korean, japanese, kanji }` 형태로 항목을 추가하면 자동완성 대상이 늘어납니다.
+
+### 7. 새 사전 세트 추가하기 (N5_1, N5_2, N4_1 ... )
+ 
+`src/data/dictionary.js`에서 두 가지만 수정하면 새로운 레벨별 사전 세트를 추가할 수 있습니다.
+ 
+1. **단어 배열을 export** 합니다. 형식은 `{ korean, japanese, kanji }`이며, `kanji`가 없는 단어는 빈 문자열(`''`)로 둡니다.
+```js
+  export const LOCAL_DICTIONARY_N4_1 = [
+    { "kanji": "間", "japanese": "あいだ", "korean": "사이" },
+    { "kanji": "会う", "japanese": "あう", "korean": "만나다" },
+    { "kanji": "青い", "japanese": "あおい", "korean": "파랗다" },
+    // ... 원하는 만큼 추가
+  ]
+```
+ 
+2. **`DICTIONARY_SETS` 배열에 등록**합니다. 여기 등록된 항목만 "사전 세트 불러오기" 드롭다운에 표시됩니다.
+```js
+ export const DICTIONARY_SETS = [
+    { id: 'n5_1', label: 'N5_1', words: LOCAL_DICTIONARY_N5_1 },
+    { id: 'n4_1', label: 'N4_1', words: LOCAL_DICTIONARY_N4_1 }, // 새로 추가
+  ]
+```
+
+  - `id`는 서로 겹치지 않는 고유 문자열이어야 합니다.
+  - `label`은 드롭다운에 표시되는 이름이며, 자유롭게 작성해도 됩니다.
+이후 앱을 새로고침하면 "단어장" 탭의 "사전 세트 불러오기"에서 새 세트를 선택해 원하는 폴더로 한 번에 불러올 수 있습니다. 이미 같은 폴더에 동일한 일본어 단어가 있으면 자동으로 건너뜁니다.
+ 
+> 참고: 자동완성에 쓰이는 `LOCAL_DICTIONARY`는 이 세트들과는 별개의 목록입니다. 자동완성 항목을 늘리고 싶다면 `LOCAL_DICTIONARY` 배열에 직접 추가하면 됩니다.
