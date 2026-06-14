@@ -57,6 +57,16 @@ export default function App() {
     setFolders((prev) => prev.map((f) => (f.id === folderId ? { ...f, name } : f)))
   }
 
+  const handleDeleteFolder = (folderId) => {
+    setFolders((prev) => prev.filter((f) => f.id !== folderId))
+    setWords((prev) => prev.filter((w) => w.folderId !== folderId))
+    setLastSessionWrong((prev) => {
+      const next = { ...prev }
+      delete next[folderId]
+      return next
+    })
+  }
+
   const handleSessionFinished = (folderId, results) => {
     const wrongIds = results.filter((r) => r.judgement === 'wrong').map((r) => r.wordId)
     setLastSessionWrong((prev) => ({ ...prev, [folderId]: wrongIds }))
@@ -114,6 +124,7 @@ export default function App() {
             onSetActiveFolder={setActiveFolderId}
             onAddFolder={handleAddFolder}
             onRenameFolder={handleRenameFolder}
+            onDeleteFolder={handleDeleteFolder}
             onUpdateWords={setWords}
             onSettingsChange={setSettings}
             onImport={handleImport}

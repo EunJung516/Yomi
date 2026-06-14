@@ -14,6 +14,7 @@ export default function Library({
   onSetActiveFolder,
   onAddFolder,
   onRenameFolder,
+  onDeleteFolder,
   onUpdateWords,
   onSettingsChange,
   onImport,
@@ -74,6 +75,7 @@ export default function Library({
         }}
         onAddFolder={onAddFolder}
         onRenameFolder={onRenameFolder}
+        onDeleteFolder={onDeleteFolder}
       />
 
       <WordForm

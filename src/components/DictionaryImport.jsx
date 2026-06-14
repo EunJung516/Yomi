@@ -14,36 +14,21 @@ export default function DictionaryImport({ words, folderId, onUpdateWords }) {
     const set = DICTIONARY_SETS.find((s) => s.id === setId)
     if (!set) return
 
-    const existing = new Set(
-      words.filter((w) => w.folderId === folderId).map((w) => w.japanese.trim().toLowerCase())
-    )
-
     const now = Date.now()
-    const newWords = []
-    set.words.forEach((entry, i) => {
-      const key = entry.japanese.trim().toLowerCase()
-      if (existing.has(key)) return
-      existing.add(key)
-      newWords.push({
-        id: generateId('word'),
-        folderId,
-        kanji: entry.kanji || '',
-        japanese: entry.japanese,
-        korean: entry.korean,
-        createdAt: now - i, // 사전 내 순서를 최신순 정렬에 반영
-        updatedAt: now,
-        favorite: false,
-        stats: { correctCount: 0, wrongCount: 0, lastStudiedAt: null, difficultyScore: 0 },
-      })
-    })
-
-    if (newWords.length === 0) {
-      setMessage('이미 모두 등록된 단어들이라 추가된 항목이 없어요.')
-      return
-    }
+    const newWords = set.words.map((entry, i) => ({
+      id: generateId('word'),
+      folderId,
+      kanji: entry.kanji || '',
+      japanese: entry.japanese,
+      korean: entry.korean,
+      createdAt: now - i,
+      updatedAt: now,
+      favorite: false,
+      stats: { correctCount: 0, wrongCount: 0, lastStudiedAt: null, difficultyScore: 0 },
+    }))
 
     onUpdateWords([...newWords, ...words])
-    setMessage(`${newWords.length}개의 단어를 불러왔어요. (중복 ${set.words.length - newWords.length}개 제외)`)
+    setMessage(`${newWords.length}개의 단어를 불러왔어요.`)
   }
 
   return (
