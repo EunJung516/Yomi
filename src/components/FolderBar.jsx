@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ConfirmModal from './ConfirmModal'
 
-export default function FolderBar({ folders, words, activeFolderId, onSelect, onAddFolder, onRenameFolder, onDeleteFolder }) {
+export default function FolderBar({ folders, words, activeFolderId, onSelect, onAddFolder, onRenameFolder, onDeleteFolder, showEdit = true }) {
   const [editingId, setEditingId] = useState(null)
   const [editValue, setEditValue] = useState('')
   const [adding, setAdding] = useState(false)
@@ -62,7 +62,7 @@ export default function FolderBar({ folders, words, activeFolderId, onSelect, on
                 <span className="folder-count">{countFor(folder.id)}</span>
               </button>
             )}
-            {activeFolderId === folder.id && editingId !== folder.id && (
+            {showEdit && activeFolderId === folder.id && editingId !== folder.id && (
               <>
                 <button className="folder-edit-btn" onClick={() => startEdit(folder)} aria-label="폴더 이름 수정">
                   ✎

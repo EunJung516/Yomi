@@ -144,6 +144,7 @@ export default function App() {
               }}
               onAddFolder={handleAddFolder}
               onRenameFolder={handleRenameFolder}
+              showEdit={false}
             />
             <StatsPage
               words={words}
