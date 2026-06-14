@@ -34,7 +34,7 @@ export default function StudyConfig({ words, folders, activeFolderId, settings, 
     <div className="card">
       <h2 className="section-title">공부하기 — {activeFolder?.name}</h2>
 
-      <div style={{display: 'flex', gap: 16}}>
+      <div className="option-layout">
         <div style={{flex: 1}}>
           <h3 className="section-title" style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
             퀴즈 모드

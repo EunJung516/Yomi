@@ -425,6 +425,15 @@ select.input:focus {
 }
 
 /* ---------- Study config ---------- */
+.option-layout {
+  display: flex;
+  gap: 16px;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
 .option-grid {
   display: flex;
   flex-direction: column;
